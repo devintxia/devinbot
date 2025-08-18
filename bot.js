@@ -66,15 +66,23 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on(Events.MessageCreate, gotMessage);
 
+// this is probably just going to be for silly fun stuff.
 function gotMessage(msg){
     // const message = `${msg.author}: ${msg.content}`;
     // console.log(message);
     if (msg.content == "<@1160128119638859806> hi"){
         msg.reply('hiii (,,> ᴗ <,,)')
-    } else if (msg.content == "<@1160128119638859806> goodnight") {
+    } 
+    if (msg.content == "<@1160128119638859806> goodnight") {
         msg.reply('goodnight (ᴗ˳ᴗ)💤')
-    } else if (msg.content == "<@1160128119638859806> good morning") {
+    } 
+    if (msg.content == "<@1160128119638859806> good morning") {
         msg.reply('good morning! ˶ᵔ ᵕ ᵔ˶')
+    }
+    if (msg.content.toLowerCase().includes("dance") && msg.content.toLowerCase().includes("oguri") && msg.content.toLowerCase().includes("cap")) {
+        if (!msg.author.bot) {
+            msg.channel.send('https://tenor.com/view/oguri-cap-oguri-cap-dancing-umamusume-chibi-gif-10169214246627292150')
+        }
     }
 }
 
