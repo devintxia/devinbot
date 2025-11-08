@@ -14,6 +14,24 @@ module.exports = {
             await interaction.deferReply();
             await interaction.editReply('working . . .');
 
+            // now you want to look for the .csv file that I stored in and iterate the name by 1
+            // ex: devinmessages 1.csv --> devinmessages 2.csv
+            // maybe I should just do f = filename.split() --> nf = file(f.at(0) + f.at(1)+=1).csv
+
+            const fs = require('fs');
+            const path = require('node:path');
+            const dir = path.join(__dirname, 'messages');   // gets messages folder
+            let size = 0;
+            fs.readdir(dir, (err, files) => {
+                if (files) {
+                    console.log(files.length);
+                    size = files.length;
+                } else {
+                    // otherwise you know it's empty
+                    console.log('empty');
+                }
+            });
+
             const channel = interaction.channel ?? await client.channels.fetch(interaction.channelId);
             
             // gathers the first 100 messages
@@ -22,6 +40,10 @@ module.exports = {
 
             let index = 0;
             let flag = null;
+            let data = [
+                ['Name', 'Message', 'Time']
+            ];
+            let row = [];
             let intervalID = setInterval(async function () {
                 // this is what stops it
                 if (index === messages.length && index % 100 !== 0) {
@@ -45,11 +67,21 @@ module.exports = {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
                         console.log(`Got message ${message.content}`);
+                        row = [message.author, message.content, message.createdAt];
                     }
                 } catch (error) {
 
                 }
             }, 10);
+
+            // okay so now I think I can start adding the data to file. hooray!
+            fs.writeFile(`devinmessages ${size}.csv`, , (err) => {
+                if (err) {
+                    console.error('Error creating file:', err);
+                    return;
+                }
+                console.log('File "myFile.txt" created successfully!');
+            });
         }
     },
 }

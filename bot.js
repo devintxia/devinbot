@@ -19,6 +19,7 @@ client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');   // gets commands folder inside the directory of bot.js (this file)
 const commandFolders = fs.readdirSync(foldersPath);     // sets commandFolders to \commands
 
+
 // get commands folder
 for (const folder of commandFolders){   // for each folder inside of commandFolders
     const commandsPath = path.join(foldersPath, folder);    //  commandsPath -> devinbot\commands\{current "folder"}
@@ -70,15 +71,25 @@ client.on(Events.MessageCreate, gotMessage);
 function gotMessage(msg){
     // const message = `${msg.author}: ${msg.content}`;
     // console.log(message);
-    if (msg.content == "<@1160128119638859806> hi"){
+    
+    // hi :3
+    if (msg.content.toLowerCase() == "<@1160128119638859806> hi"){
         msg.reply('hiii (,,> ᴗ <,,)')
-    } 
-    if (msg.content == "<@1160128119638859806> goodnight") {
-        msg.reply('goodnight (ᴗ˳ᴗ)💤')
-    } 
-    if (msg.content == "<@1160128119638859806> good morning") {
+    }
+
+    // good night
+    if (msg.content.toLowerCase() == "<@1160128119638859806> goodnight" ||
+    msg.content.toLowerCase() == "<@1160128119638859806> good night" ||
+    msg.content.toLowerCase() == "<@1160128119638859806> gn") {
+        msg.reply('good night (ᴗ˳ᴗ)💤')
+    }
+
+    // good morning
+    if (msg.content.toLowerCase() == "<@1160128119638859806> good morning" || msg.content.toLowerCase() == "<@1160128119638859806> gm") {
         msg.reply('good morning! ˶ᵔ ᵕ ᵔ˶')
     }
+
+    // Oguri Cap??
     if (msg.content.toLowerCase().includes("dance") && msg.content.toLowerCase().includes("oguri") && msg.content.toLowerCase().includes("cap")) {
         if (!msg.author.bot) {
             msg.channel.send('https://tenor.com/view/oguri-cap-oguri-cap-dancing-umamusume-chibi-gif-10169214246627292150')
