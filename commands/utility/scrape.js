@@ -43,7 +43,6 @@ module.exports = {
             let data = [
                 ['Name', 'Message', 'Time']
             ];
-            let row = [];
             let intervalID = setInterval(async function () {
                 // this is what stops it
                 if (index === messages.length && index % 100 !== 0) {
@@ -67,7 +66,8 @@ module.exports = {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
                         console.log(`Got message ${message.content}`);
-                        row = [message.author, message.content, message.createdAt];
+                        const row = [message.author, message.content, message.createdAt];
+                        data.push(row);
                     }
                 } catch (error) {
 
@@ -75,12 +75,13 @@ module.exports = {
             }, 10);
 
             // okay so now I think I can start adding the data to file. hooray!
-            fs.writeFile(`devinmessages ${size}.csv`, , (err) => {
+            const csvContent = data.map(r => r.join(',')).join('\n');
+            fs.writeFile(`devinmessages ${size}.csv`, csvContent, (err) => {
                 if (err) {
-                    console.error('Error creating file:', err);
+                    console.error('Error creating csv file', err);
                     return;
                 }
-                console.log('File "myFile.txt" created successfully!');
+                console.log(`File "devinmessages ${size}.csv" created successfully!`);
             });
         }
     },
