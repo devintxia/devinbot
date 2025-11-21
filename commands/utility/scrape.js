@@ -22,6 +22,12 @@ module.exports = {
             const fs = require('fs');
             const path = require('node:path');
             const dir = path.join(__dirname, 'messages');   // gets messages folder
+
+            // make sure messages folder exists
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+
             const files = await fs.promises.readdir(dir).catch(() => []);
             const size = files.length;
 
@@ -69,6 +75,7 @@ module.exports = {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
                         console.log(`Got message: ${message.content}`);
+                        
                         const filePath = path.join(dir, `devinmessages ${size}.txt`);
                         var stream = fs.createWriteStream(filePath, {flags:'a'});
                         stream.write(message.content + "\n");
