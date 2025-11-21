@@ -43,16 +43,7 @@ module.exports = {
                     clearInterval(intervalID);
                     // okay so now I think I can start adding the data to file. hooray!
                     
-                    const csvContent = data.map(r => r.join(',')).join('\n');
-
-                    const filePath = path.join(dir, `devinmessages ${size}.csv`);
-                    fs.writeFile(filePath, csvContent, (err) => {
-                        if (err) {
-                            console.error('Error creating csv file', err);
-                            return;
-                        }
-                        console.log(`File "devinmessages ${size}.csv" created successfully!`);
-                    });
+                    // const csvContent = data.map(r => r.join(',')).join('\n');
                     return; // finally end it all...
                 }
 
@@ -77,24 +68,28 @@ module.exports = {
                 try {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
-                        console.log(`Got message ${message.content}`);
-                        const messageList = message.content.split(" ");
-                        for (let i=0; i<messageList.length; i++) {
-                            if (i == messageList.length-1) {
-                                // if you've reached the last word
-                                const row = [messageList[i], ""];   // no word after!
-                                data.push(row);
-                            } else {
-                                // not at last word
-                                const row = [messageList[i], messageList[i+1]]
-                                data.push(row);
-                            }
-                        }
+                        console.log(`Got message: ${message.content}`);
+                        const filePath = path.join(dir, `devinmessages ${size}.txt`);
+                        var stream = fs.createWriteStream(filePath, {flags:'a'});
+                        stream.write(message.content + "\n");
+                        stream.end();
+                        // const messageList = message.content.split(" ");
+                        // for (let i=0; i<messageList.length; i++) {
+                        //     if (i == messageList.length-1) {
+                        //         // if you've reached the last word
+                        //         const row = [messageList[i], ""];   // no word after!
+                        //         data.push(row);
+                        //     } else {
+                        //         // not at last word
+                        //         const line = messageList[i];
+                        //         data.push(row);
+                        //     }
+                        // }
                     }
                 } catch (error) {
 
                 }
-            }, 10);
+            }, 1);
         }
     },
 }
