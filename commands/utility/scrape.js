@@ -41,7 +41,7 @@ module.exports = {
             let index = 0;
             let flag = null;
             let data = [
-                ['Name', 'Message', 'Time']
+                ['word', 'next']
             ];
             let intervalID = setInterval(async function () {
                 // this is what stops it
@@ -66,8 +66,18 @@ module.exports = {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
                         console.log(`Got message ${message.content}`);
-                        const row = [message.author, message.content, message.createdAt];
-                        data.push(row);
+                        const messageList = message.content.split(" ");
+                        for (let i=0; i<messageList.length; i++) {
+                            if (i == messageList.length-1) {
+                                // if you've reached the last word
+                                const row = [messageList[i], ""];   // no word after!
+                                data.push(row);
+                            } else {
+                                // not at last word
+                                const row = [messageList[i], messageList[i+1]]
+                                data.push(row);
+                            }
+                        }
                     }
                 } catch (error) {
 
