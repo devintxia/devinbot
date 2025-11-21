@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, InteractionResponse } = require('discord.js');
+const { after } = require('node:test');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -21,16 +22,8 @@ module.exports = {
             const fs = require('fs');
             const path = require('node:path');
             const dir = path.join(__dirname, 'messages');   // gets messages folder
-            let size = 0;
-            fs.readdir(dir, (err, files) => {
-                if (files) {
-                    console.log(files.length);
-                    size = files.length;
-                } else {
-                    // otherwise you know it's empty
-                    console.log('empty');
-                }
-            });
+            const files = await fs.promises.readdir(dir).catch(() => []);
+            const size = files.length;
 
             const channel = interaction.channel ?? await client.channels.fetch(interaction.channelId);
             
@@ -45,15 +38,22 @@ module.exports = {
             ];
             let intervalID = setInterval(async function () {
                 // this is what stops it
-                if (index === messages.length && index % 100 !== 0) {
+                if (messages.size < 100 && index === messages.size) {
                     await interaction.editReply('done! (,,> ᴗ <,,)');
                     clearInterval(intervalID);
-                }
-                
-                // this is what resets it
-                if (index === 100) {
-                    messages = await channel.messages.fetch({before: flag.id, limit: 100});
-                    index = 0;
+                    // okay so now I think I can start adding the data to file. hooray!
+                    
+                    const csvContent = data.map(r => r.join(',')).join('\n');
+
+                    const filePath = path.join(dir, `devinmessages ${size}.csv`);
+                    fs.writeFile(filePath, csvContent, (err) => {
+                        if (err) {
+                            console.error('Error creating csv file', err);
+                            return;
+                        }
+                        console.log(`File "devinmessages ${size}.csv" created successfully!`);
+                    });
+                    return; // finally end it all...
                 }
 
                 // this is what iterates through it
@@ -62,6 +62,18 @@ module.exports = {
                     // this is the last message that isn't null / exists
                     flag = message;
                 }
+
+                // this is what resets it
+                if (index === messages.size) {
+                    if (!flag) {
+                        // in case message is null somehow?
+                        flag = messages.at(messages.size - 1);
+                    }
+                    // console.log(`current flag is: ${flag.content}`)
+                    messages = await channel.messages.fetch({before: flag.id, limit: 100});
+                    index = 0;
+                }
+
                 try {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
@@ -83,16 +95,6 @@ module.exports = {
 
                 }
             }, 10);
-
-            // okay so now I think I can start adding the data to file. hooray!
-            const csvContent = data.map(r => r.join(',')).join('\n');
-            fs.writeFile(`devinmessages ${size}.csv`, csvContent, (err) => {
-                if (err) {
-                    console.error('Error creating csv file', err);
-                    return;
-                }
-                console.log(`File "devinmessages ${size}.csv" created successfully!`);
-            });
         }
     },
 }
