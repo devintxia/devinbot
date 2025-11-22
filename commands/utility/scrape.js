@@ -38,13 +38,14 @@ module.exports = {
             // let messagesByMe = messages.filter(m => m.id && m.author.id === '131039560355282944');
 
             let index = 0;
+            let messageCount = 0;
             let flag = null;
             let data = [
                 ['word', 'next']
             ];
             let intervalID = setInterval(async function () {
                 // this is what stops it
-                if (messages.size < 100 && index === messages.size) {
+                if (messageCount >= 20000 || messages.size < 100 && index === messages.size) {
                     await interaction.editReply('done! (,,> ᴗ <,,)');
                     clearInterval(intervalID);
                     // okay so now I think I can start adding the data to file. hooray!
@@ -74,6 +75,7 @@ module.exports = {
                 try {
                     if (message.author.id === '131039560355282944') {
                         // this is where you want to do stuff with the message
+                        messageCount += 1;
                         console.log(`Got message: ${message.content}`);
                         
                         const filePath = path.join(dir, `devinmessages ${size}.txt`);

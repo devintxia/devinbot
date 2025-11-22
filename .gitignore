@@ -1,3 +1,6 @@
 node_modules/
 /config.json
 messages/
+markovify json/
+*.txt
+*.json
