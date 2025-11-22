@@ -1,5 +1,3 @@
 Hello! ^_^
 
-This Discord bot is my personal project.
-
-As of right now I am working on adding: A Markov chain feature
+This Discord bot generates sentences using a Markov Chain based on a model of my message history on Discord.
