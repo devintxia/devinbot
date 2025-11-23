@@ -13,9 +13,11 @@ except Exception as e:
     text = None
 
 if text:
-    text_model = markovify.Text.from_json(text)
+    # only do this if text has stuff
+    text_model = markovify.Text.from_json(text) # text is a cached model
     sentence = text_model.make_sentence()
     if sentence is None:
+        # if unable to produce sentence
         sentence = "No sentence generated."
     print(sentence, flush=True)
 else:

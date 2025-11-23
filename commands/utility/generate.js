@@ -13,6 +13,7 @@ module.exports = {
         const scriptPath = path.join(__dirname, 'markov_generator.py');
         
         if (!fs.existsSync(scriptPath)) {
+            // checking if the file exists
             console.log('markov_generator.py not found');
             return await interaction.reply({content: 'markov_generator.py not found', 
                 flags: 64 });   // ephemeral
@@ -23,12 +24,12 @@ module.exports = {
         await interaction.deferReply({ flags: 64 });    // ephemeral
         await interaction.editReply('Working...');
 
-        // Use exec instead of spawn
+        // execute python script
         exec(`python -u "${scriptPath}"`, (error, stdout, stderr) => {
             console.log('finished');
-            console.log('error', error);
-            console.log('output', stdout);
-            console.log('stderror', stderr);
+            console.log('error:', error);
+            console.log('output:', stdout);
+            console.log('stderror:', stderr);
             
             if (error) {
                 console.error('error: ', error);
